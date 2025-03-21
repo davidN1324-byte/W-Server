@@ -1,0 +1,7 @@
+# Here’s an example for manual verification of a self-signed certificate
+
+SHA-256 Fingerprint: 
+18:98:1B:05:18:37:D7:7F:7C:20:8B:F3:16:8B:85:48:CD:E5:07:EF:D5:DD:B9:07:2C:FF:8D:53:25:BE:5B:0D
+
+SHA-256:
+f53ff47e1e6811af4b3fff9a1f506a42ff5694c8e22383ab627f11ef0b53fbe9
