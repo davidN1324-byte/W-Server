@@ -1,24 +1,24 @@
 📂 project/
 │── 📂 app/
-│ ├── 📜 __init__.py # Make the `app` folder a module
-│ ├── 📜 main.py # Main file with FastAPI
-│ ├── 📂 routes/ # Endpoints (routes)
-│ │ ├── 📜 __init__.py # Make the `routes` folder a module
-│ │ ├── 📜 files.py # Logic for uploading/downloading/deleting files
-│ ├── 📂 services/ # Helper functions
-│ │ ├── 📜 __init__.py
-│ │ ├── 📜 utils.py # Validation, unique name generation
-│ ├── 📂 config/ # Configs
-│ │ ├── 📜 __init__.py
-│ │ ├── 📜 settings.py # Project settings
-│ ├── 📂 templates/ # HTML templates (Jinja2)
-│ │ ├── 📜 index.html
-│ ├── 📂 static/ # CSS, JS, images
+│   ├── 📜 __init__.py # Make the `app` folder a module
+│   ├── 📜 main.py # Main file with FastAPI
+│   ├── 📂 routes/ # Endpoints (routes)
+│   │   ├── 📜 __init__.py # Make the `routes` folder a module
+│   │   ├── 📜 files.py # Logic for uploading/downloading/deleting files
+│   ├── 📂 services/ # Helper functions
+│   │   ├── 📜 __init__.py
+│   │   ├── 📜 utils.py # Validation, unique name generation
+│   ├── 📂 config/ # Configs
+│   │   ├── 📜 __init__.py
+│   │   ├── 📜 settings.py # Project settings
+│   ├── 📂 templates/ # HTML templates (Jinja2)
+│   │   ├── 📜 index.html
+│   ├── 📂 static/ # CSS, JS, images
 │
 ├── 📂 uploads/ # Folder for uploaded files (automatically created)
 ├── 📜 app.py # Launch via `python3 app.py`
 ├── 📜 requirements.txt # List of dependencies
 ├── 📜 .env # File with environment variables
 ├── 📂 Cert/ # SSL certificates
-│ ├── 📜 cert.pem
-│ ├── 📜 key.pem
+│   ├── 📜 cert.pem
+│   ├── 📜 key.pem
