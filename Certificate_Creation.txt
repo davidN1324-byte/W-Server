@@ -1,0 +1,29 @@
+# Linux 
+
+# Install pakage
+$ apt install openssl
+
+# Self-signed certificate generation (certificate + key)
+$ openssl req -newkey rsa:4096 -nodes -keyout key.pem -x509 -days 365 -out cert.pem
+
+Explanation of parameters:
+-newkey rsa:4096 — creates a new 4096-bit RSA key.
+-nodes — does not encrypt the private key (no password required when starting the server).
+-keyout key.pem — path to save the private key.
+-x509 — generates a self-signed certificate.
+-days 365 — certificate validity period (can be changed).
+-out cert.pem — path to save the certificate.
+
+# Certificate verification
+$ openssl x509 -in cert.pem -text -noout
+
+# Windows
+
+# Download OpenSSL for Windows. Install it and add it to PATH if needed.
+# Certificate generation open cmd or PowerShell
+$ openssl req -newkey rsa:4096 -nodes -keyout key.pem -x509 -days 365 -out cert.pem
+
+# Certificate verification
+$ openssl x509 -in cert.pem -text -noout
+
+!!! If the certificate is needed for public use, it is better to use Let's Encrypt instead of a self-signed one. !!!
