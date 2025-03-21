@@ -14,3 +14,8 @@ def check_permissions(path: Path):
 def allowed_file(filename: str, content_type: str) -> bool:
     from config import ALLOWED_EXTENSIONS, ALLOWED_MIMES
     return filename.split(".")[-1].lower() in ALLOWED_EXTENSIONS and content_type in ALLOWED_MIMES
+
+def get_unique_filename(file_name: str) -> str:
+    file_hash = hashlib.sha256(file_name.encode()).hexdigest()
+    return file_hash + Path(file_name).suffix
+
