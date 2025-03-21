@@ -12,7 +12,7 @@ def check_permissions(path: Path):
         raise HTTPException(status_code=500, detail=f"Permission denied to write to {path}")
 
 def allowed_file(filename: str, content_type: str) -> bool:
-    from config import ALLOWED_EXTENSIONS, ALLOWED_MIMES
+    from app.config import ALLOWED_EXTENSIONS, ALLOWED_MIMES
     return filename.split(".")[-1].lower() in ALLOWED_EXTENSIONS and content_type in ALLOWED_MIMES
 
 def get_unique_filename(file_name: str) -> str:
