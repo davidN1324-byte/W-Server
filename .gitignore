@@ -4,3 +4,4 @@ Cert/key.pem
 Cert/cert.pem
 __pycache__
 tree.txt
+uploads/
