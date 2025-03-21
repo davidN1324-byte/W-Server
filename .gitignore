@@ -2,3 +2,4 @@
 static/icon/
 Cert/key.pem
 Cert/cert.pem
+__pycache__
