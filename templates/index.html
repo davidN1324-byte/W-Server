@@ -109,14 +109,14 @@
                     let downloadCell = document.createElement('td');
                     let downloadLink = document.createElement('a');
                     downloadLink.href = '/download/' + file;
-                    downloadLink.textContent = 'Скачать';
+                    downloadLink.textContent = 'Download';
                     downloadCell.appendChild(downloadLink);
                     row.appendChild(downloadCell);
     
                     // Delete button
                     let deleteCell = document.createElement('td');
                     let deleteButton = document.createElement('button');
-                    deleteButton.textContent = 'Удалить';
+                    deleteButton.textContent = 'Delete';
                     deleteButton.onclick = () => deleteFile(file);
                     deleteCell.appendChild(deleteButton);
                     row.appendChild(deleteCell);
