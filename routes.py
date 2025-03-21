@@ -52,3 +52,12 @@ async def download_file(filename: str):
     if not file_path.exists():
         raise HTTPException(status_code=404, detail="File not found")
     return FileResponse(file_path, media_type="application/octet-stream", filename=filename)
+
+@router.delete("/delete/{filename}")
+async def delete_file(filename: str):
+    file_path = UPLOAD_FOLDER / filename
+    if not file_path.exists():
+        raise HTTPException(status_code=404, detail="File not found")
+    
+    file_path.unlink()
+    return {"filename": filename, "message": "File deleted successfully"}
