@@ -3,7 +3,7 @@ import hashlib
 import magic
 from pathlib import Path
 from fastapi import HTTPException
-from config import UPLOAD_FOLDER
+from app.config import UPLOAD_FOLDER
 
 def check_permissions(path: Path):
     if not path.exists():
