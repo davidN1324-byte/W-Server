@@ -9,3 +9,6 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(
 logger = logging.getLogger(__name__)
 
 check_permissions(UPLOAD_FOLDER)
+
+app = FastAPI()
+# Creating a FastAPI application
