@@ -1,0 +1,15 @@
+W-Server/
+│── app/
+│   │── __init__.py
+│   │── main.py         # Main application file
+│   │── config.py       # Configuration (paths, restrictions)
+│   │── utils.py        # Helper functions (hashing, MIME checking)
+│   │── routes.py       # Routers (upload, download, delete files)
+│── templates/
+│   └── index.html      # HTML template for displaying uploaded files
+│── static/             # Static files (CSS, JS)
+│── uploads/            # Folder for downloaded files
+│── Cert/               # Folder for SSL certificates
+│── requirements.txt    # Project dependencies
+│── run.py              # Application Launch Script
+│── README.md           # Project Description
