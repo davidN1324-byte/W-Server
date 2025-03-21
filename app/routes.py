@@ -4,8 +4,8 @@ from fastapi.templating import Jinja2Templates
 from pathlib import Path
 import shutil
 import logging
-from config import UPLOAD_FOLDER, MAX_CONTENT_LENGTH
-from utils import check_permissions, allowed_file, get_unique_filename, get_mime_type
+from app.config import UPLOAD_FOLDER, MAX_CONTENT_LENGTH
+from app.utils import check_permissions, allowed_file, get_unique_filename, get_mime_type
 
 logger = logging.getLogger(__name__)
 
