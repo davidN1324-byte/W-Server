@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Web Server</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='style.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', path='icon/100x99.png') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <header>
+        <h1>Загрузите файл</h1>
+        <div id="message" style="display: none; color: red;"></div>
+        <div id="loading" style="display: none;">Loading file, please wait...</div>
+    </header>
+    
+    <main>
+        <form id="uploadForm" enctype="multipart/form-data" onsubmit="return uploadFile(event);">
+            <label class="custom-file-upload">
+                Select file
+                <input type="file" name="file" id="fileInput" onchange="updateFileInfo()">
+            </label>
+            <div id="fileInfo" class="file-info">File name: <span id="fileName"> No file selected</span></div>
+            <input type="submit" value="Загрузить">
+        </form>
+        
+        <section class="file-section">
+            <h2>Available files for download:</h2>
+            <table class="file-table">
+                <thead>
+                    <tr>
+                        <th>File name</th>
+                        <th>Download</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody id="fileList"></tbody>
+            </table>
+        </section>
+    </main>
+    
+    <script>
+        // Updating information about the selected file
+        function updateFileInfo() {
+            var fileInput = document.getElementById('fileInput');
+            var fileName = document.getElementById('fileName');
+            fileName.textContent = fileInput.files[0] ? fileInput.files[0].name : 'No file selected';
+        }
+    
+        // Uploading file
+        async function uploadFile(event) {
+            event.preventDefault();  // This will prevent the standard form submission.
+    
+            var fileInput = document.getElementById('fileInput');
+            var file = fileInput.files[0];
+            if (!file) {
+                alert('Please select a file to upload.');
+                return false;
+            }
+    
+            var formData = new FormData();
+            formData.append('file', file);
+    
+            // Show loading message
+            document.getElementById('loading').style.display = 'block';
+    
+            try {
+                let response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                let result = await response.json();
+    
+                if (response.ok) {
+                    loadFiles();  // Reloading the file list
+                    alert('File uploaded successfully!');
+                } else {
+                    console.error(result);
+                    alert('Error loading file: ' + result.detail);
+                }
+            } catch (error) {
+                console.error('Error loading file:', error);
+                alert('Error: ' + error.message);
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+            }
+    
+            return false;
+        }
+    
+        // Downloading a list of files from the server
+        async function loadFiles() {
+            try {
+                let response = await fetch('/files');
+                let result = await response.json();
+    
+                let fileList = document.getElementById('fileList');
+                fileList.innerHTML = '';
+    
+                result.files.forEach(file => {
+                    let row = document.createElement('tr');
+    
+                    // File name
+                    let fileNameCell = document.createElement('td');
+                    fileNameCell.textContent = file;  // Make sure it's a line
+                    row.appendChild(fileNameCell);
+    
+                    // Download link
+                    let downloadCell = document.createElement('td');
+                    let downloadLink = document.createElement('a');
+                    downloadLink.href = '/download/' + file;
+                    downloadLink.textContent = 'Скачать';
+                    downloadCell.appendChild(downloadLink);
+                    row.appendChild(downloadCell);
+    
+                    // Delete button
+                    let deleteCell = document.createElement('td');
+                    let deleteButton = document.createElement('button');
+                    deleteButton.textContent = 'Удалить';
+                    deleteButton.onclick = () => deleteFile(file);
+                    deleteCell.appendChild(deleteButton);
+                    row.appendChild(deleteCell);
+    
+                    fileList.appendChild(row);
+                });
+            } catch (error) {
+                console.error('Error loading file list: ' + error.message);
+            }
+        }
+    
+        // Deleting a file
+        async function deleteFile(filename) {
+            try {
+                let response = await fetch(`/delete/${filename}`, {
+                    method: 'DELETE'
+                });
+                let result = await response.json();
+    
+                if (response.ok) {
+                    loadFiles();  // Reloading the file list
+                    alert('File successfully deleted!');
+                } else {
+                    alert('Error deleting file: ' + result.detail);
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+    
+        // Loading a list of files at startup
+        window.onload = loadFiles;
+    </script>    
+</body>
+</html>
