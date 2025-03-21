@@ -21,3 +21,27 @@ async def home(request: Request):
 async def list_files():
     files = [f.name for f in UPLOAD_FOLDER.iterdir() if f.is_file()]
     return {"files": files}
+
+@router.post("/upload")
+async def upload_file(file: UploadFile = File(...)):
+    file_bytes = await file.read()
+    file_size = len(file_bytes)
+
+    if file_size > MAX_CONTENT_LENGTH:
+        raise HTTPException(status_code=413, detail="File too large")
+
+    detected_mime = get_mime_type(file_bytes)
+    if not allowed_file(file.filename, detected_mime):
+        raise HTTPException(status_code=400, detail="Invalid file type")
+
+    file.file.seek(0)  # Reset pointer after reading
+    unique_filename = get_unique_filename(file.filename)
+    file_path = UPLOAD_FOLDER / unique_filename
+
+    if file_path.exists():
+        raise HTTPException(status_code=409, detail="File already exists")
+
+    with file_path.open("wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+
+    return {"filename": unique_filename, "message": "File uploaded successfully"}
