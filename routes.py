@@ -12,3 +12,7 @@ logger = logging.getLogger(__name__)
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
+@router.get("/", response_class=HTMLResponse)
+async def home(request: Request):
+    files = [f.name for f in UPLOAD_FOLDER.iterdir() if f.is_file()]
+    return templates.TemplateResponse("index.html", {"request": request, "files": files})
