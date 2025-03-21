@@ -16,3 +16,8 @@ templates = Jinja2Templates(directory="templates")
 async def home(request: Request):
     files = [f.name for f in UPLOAD_FOLDER.iterdir() if f.is_file()]
     return templates.TemplateResponse("index.html", {"request": request, "files": files})
+
+@router.get("/files")
+async def list_files():
+    files = [f.name for f in UPLOAD_FOLDER.iterdir() if f.is_file()]
+    return {"files": files}
