@@ -45,3 +45,10 @@ async def upload_file(file: UploadFile = File(...)):
         shutil.copyfileobj(file.file, buffer)
 
     return {"filename": unique_filename, "message": "File uploaded successfully"}
+
+@router.get("/download/{filename}")
+async def download_file(filename: str):
+    file_path = UPLOAD_FOLDER / filename
+    if not file_path.exists():
+        raise HTTPException(status_code=404, detail="File not found")
+    return FileResponse(file_path, media_type="application/octet-stream", filename=filename)
