@@ -3,3 +3,5 @@ uvicorn
 python-magic
 jinja2
 python-multipart
+flask
+python-magic-bin
