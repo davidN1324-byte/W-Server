@@ -10,179 +10,189 @@ body {
     height: 100vh; /* Use full screen height */
     margin: 0;
     padding: 0;
-    }
-    
-    header {
+}
+
+header {
     text-align: center;
     padding: 20px 0;
     background: linear-gradient(145deg, #0f0, #333);
     width: 100%;
     box-shadow: 0 4px 6px rgba(0, 255, 0, 0.3);
-    }
-    
-    h1, h2 {
+}
+
+h1, h2 {
     color: #0f0;
     text-shadow: 1px 1px 2px #333;
     margin: 0;
     font-size: 28px;
-    }
-    
-    /* Main container */
-    main {
+}
+
+/* Main container */
+main {
     width: 90%;
     max-width: 1200px;
-    margin-top: 30px; /* Top padding for main content */
+    margin-top: 30px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    }
-    
-    /* Upload form */
-    form {
+}
+
+/* Upload form */
+form {
     background-color: #222;
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0 6px 12px rgba(0, 255, 0, 0.2);
     width: 100%;
     max-width: 600px;
-     margin-bottom: 30px; /* Indent between form and table */
-     display: flex;
-     flex-direction: column;
-     align-items: center;
-    }
-    
-    .custom-file-upload {
-     display: inline-block;
-     padding: 12px 25px;
-     font-size: 16px;
-     color: #fff;
-     background-color: #444;
-     border: 2px solid #555;
-     border-radius: 6px;
-     cursor: pointer;
-     transition: background-color 0.3s, transform 0.2s;
-     width: 100%;
-     text-align: center;
-     margin-bottom: 15px; /* Bottom padding */
-    }
-    
-    input[type="file"] {
-     display: none;
-    }
-    
-    input[type="submit"] {
-     background-color: #444;
-     color: #fff;
-     border-radius: 6px;
-     border: 2px solid #555;
-     padding: 10px;
-     font-size: 16px;
-     cursor: pointer;
-     margin-top: 15px;
-     width: 100%;
-    }
-    
-    input[type="submit"]:hover {
-     background-color: #555;
-    }
-    
-    .file-info {
-     margin-top: 15px;
-     color: #0f0;
-     font-weight: bold;
-     text-align: center;
-    }
-    
-    /* Header for files */
-    h2 {
-     width: 100%;
-     text-align: center; /* Center the header */
-     margin-top: 30px;
-    }
-    
-    /* Section with files */
-    .file-section {
-     width: 100%;
-     max-width: 1200px;
-     margin: 0 auto;
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.custom-file-upload {
+    display: inline-block;
+    padding: 12px 25px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #444;
+    border: 2px solid #555;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+input[type="submit"] {
+    background-color: #444;
+    color: #fff;
+    border-radius: 6px;
+    border: 2px solid #555;
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 15px;
+    width: 100%;
+}
+
+input[type="submit"]:hover {
+    background-color: #555;
+}
+
+.file-info {
+    margin-top: 15px;
+    color: #0f0;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Header for files */
+h2 {
+    width: 100%;
+    text-align: center;
+    margin-top: 30px;
+}
+
+/* Section with files */
+.file-section {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.file-table {
+    width: 100%;
+    margin-top: 30px;
+    border-collapse: collapse;
+    background-color: #1a1a1a;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 255, 0, 0.2);
+}
+
+.file-table th, .file-table td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #555;
+    color: #0f0;
+}
+
+.file-table th {
+    background-color: #333;
+    color: #fff;
+}
+
+.file-table tr:nth-child(even) {
+    background-color: #222;
+}
+
+.file-table tr:hover {
+    background-color: #444;
+}
+
+button {
+    padding: 8px 16px;
+    background-color: #0f0;
+    color: black;
+    border-radius: 6px;
+    border: 2px solid #555;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+button:hover {
+    background-color: red;
+    color: white;
+}
+
+/* Media queries for better mobile adaptation */
+@media (max-width: 768px) {
+    main {
+        width: 95%;
     }
     
     .file-table {
-     width: 100%;
-     margin-top: 30px;
-     border-collapse: collapse;
-     background-color: #1a1a1a;
-     border-radius: 8px;
-     box-shadow: 0 4px 8px rgba(0, 255, 0, 0.2);
+        font-size: 14px;
+    }
+    
+    .custom-file-upload, input[type="submit"], button {
+        font-size: 14px;
+        padding: 10px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        align-items: flex-start;
+        padding: 10px;
+    }
+    
+    h1, h2 {
+        font-size: 22px;
+    }
+    
+    form {
+        width: 100%;
+        padding: 20px;
+    }
+    
+    .file-table, h1, h2, .file-info {
+        width: 100%;
     }
     
     .file-table th, .file-table td {
-     padding: 12px;
-     text-align: center;
-     border-bottom: 1px solid #555;
-     color: #0f0;
+        font-size: 12px;
+        padding: 8px;
     }
     
-    .file-table th {
-     background-color: #333;
-     color: #fff;
+    .custom-file-upload, input[type="submit"], button {
+        font-size: 12px;
+        padding: 8px 16px;
     }
-    
-    .file-table tr:nth-child(even) {
-     background-color: #222;
-    }
-    
-    .file-table tr:hover {
-     background-color: #444;
-    }
-    
-    button {
-     padding: 8px 16px;
-     background-color: #0f0;
-     color: black;
-     border-radius: 6px;
-     border: 2px solid #555;
-     cursor: pointer;
-     transition: background-color 0.3s, color 0.3s;
-    }
-    
-    button:hover {
-     background-color: red;
-     color: white;
-    }
-    
-    /* Media queries */
-    @media (max-width: 768px) {
-     .file-table {
-     width: 100%;
-     }
-    
-     th, td {
-     font-size: 14px;
-     }
-    
-     .custom-file-upload, input[type="submit"], button {
-     font-size: 14px;
-     padding: 10px 20px;
-     }
-    }
-    
-    @media (max-width: 480px) {
-     .file-table, h1, h2, .file-info, form {
-     width: 90%;
-     }
-    
-     th, td {
-     font-size: 12px;
-     }
-    
-     .custom-file-upload, input[type="submit"], button {
-     font-size: 12px;
-     padding: 8px 16px;
-     }
-    
-     button {
-     font-size: 12px;
-     padding: 6px 12px;
-     }
-    }
+}
