@@ -31,7 +31,7 @@ h1, h2 {
 main {
     width: 90%;
     max-width: 1200px;
-    margin-top: 30px;
+    margin-top: 30px; /* Top padding for main content */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -45,7 +45,7 @@ form {
     box-shadow: 0 6px 12px rgba(0, 255, 0, 0.2);
     width: 100%;
     max-width: 600px;
-    margin-bottom: 30px;
+    margin-bottom: 30px; /* Indent between form and table */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -63,7 +63,7 @@ form {
     transition: background-color 0.3s, transform 0.2s;
     width: 100%;
     text-align: center;
-    margin-bottom: 15px;
+    margin-bottom: 15px; /* Bottom padding */
 }
 
 input[type="file"] {
@@ -96,7 +96,7 @@ input[type="submit"]:hover {
 /* Header for files */
 h2 {
     width: 100%;
-    text-align: center;
+    text-align: center; /* Center the header */
     margin-top: 30px;
 }
 
@@ -107,13 +107,20 @@ h2 {
     margin: 0 auto;
 }
 
+/* Table container for mobile scrolling */
+.table-container {
+    width: 100%;
+    overflow-x: auto; /* Enable horizontal scrolling if needed */
+}
+
+/* Table styles */
 .file-table {
     width: 100%;
-    margin-top: 30px;
-    border-collapse: collapse;
+    table-layout: fixed; /* Prevent table from expanding */
     background-color: #1a1a1a;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 255, 0, 0.2);
+    border-collapse: collapse;
 }
 
 .file-table th, .file-table td {
@@ -121,6 +128,10 @@ h2 {
     text-align: center;
     border-bottom: 1px solid #555;
     color: #0f0;
+    white-space: nowrap; /* Prevent line breaks */
+    overflow: hidden;
+    text-overflow: ellipsis; /* Show "..." if text is too long */
+    max-width: 150px; /* Prevent excessive width */
 }
 
 .file-table th {
@@ -136,6 +147,7 @@ h2 {
     background-color: #444;
 }
 
+/* Button styles */
 button {
     padding: 8px 16px;
     background-color: #0f0;
@@ -151,16 +163,17 @@ button:hover {
     color: white;
 }
 
-/* Media queries for better mobile adaptation */
+/* Mobile styles */
 @media (max-width: 768px) {
-    main {
-        width: 95%;
-    }
-    
     .file-table {
-        font-size: 14px;
+        width: 100%;
     }
-    
+
+    .file-table th, .file-table td {
+        font-size: 14px;
+        max-width: 120px;
+    }
+
     .custom-file-upload, input[type="submit"], button {
         font-size: 14px;
         padding: 10px 20px;
@@ -168,31 +181,23 @@ button:hover {
 }
 
 @media (max-width: 480px) {
-    body {
-        align-items: flex-start;
-        padding: 10px;
-    }
-    
-    h1, h2 {
-        font-size: 22px;
-    }
-    
-    form {
+    .table-container {
         width: 100%;
-        padding: 20px;
+        overflow-x: auto; /* Enable horizontal scrolling on small screens */
     }
-    
-    .file-table, h1, h2, .file-info {
-        width: 100%;
-    }
-    
+
     .file-table th, .file-table td {
         font-size: 12px;
-        padding: 8px;
+        max-width: 100px; /* Reduce max-width for mobile */
     }
-    
+
     .custom-file-upload, input[type="submit"], button {
         font-size: 12px;
         padding: 8px 16px;
+    }
+
+    button {
+        font-size: 12px;
+        padding: 6px 12px;
     }
 }
