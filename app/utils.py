@@ -4,6 +4,8 @@ import magic
 from pathlib import Path
 from fastapi import HTTPException
 from app.config import UPLOAD_FOLDER
+from app.config import ALLOWED_EXTENSIONS, ALLOWED_MIMES
+import uuid
 
 def check_permissions(path: Path):
     if not path.exists():
@@ -12,13 +14,14 @@ def check_permissions(path: Path):
         raise HTTPException(status_code=500, detail=f"Permission denied to write to {path}")
 
 def allowed_file(filename: str, content_type: str) -> bool:
-    from app.config import ALLOWED_EXTENSIONS, ALLOWED_MIMES
     return filename.split(".")[-1].lower() in ALLOWED_EXTENSIONS and content_type in ALLOWED_MIMES
 
 def get_unique_filename(file_name: str) -> str:
-    file_hash = hashlib.sha256(file_name.encode()).hexdigest()
-    return file_hash + Path(file_name).suffix
+    return f"{uuid.uuid4().hex}{Path(file_name).suffix}"
 
 def get_mime_type(file_bytes: bytes) -> str:
     mime = magic.Magic(mime=True)
     return mime.from_buffer(file_bytes)
+
+def get_file_list() -> list[str]:
+    return [f.name for f in UPLOAD_FOLDER.iterdir() if f.is_file()]
