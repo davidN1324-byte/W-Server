@@ -5,7 +5,8 @@ from pathlib import Path
 import shutil
 import logging
 from app.config import UPLOAD_FOLDER, MAX_CONTENT_LENGTH
-from app.utils import check_permissions, allowed_file, get_unique_filename, get_mime_type
+from app.utils import check_permissions, allowed_file, get_unique_filename, get_mime_type, get_file_list
+
 
 logger = logging.getLogger(__name__)
 
@@ -14,13 +15,11 @@ templates = Jinja2Templates(directory="templates")
 
 @router.get("/", response_class=HTMLResponse)
 async def home(request: Request):
-    files = [f.name for f in UPLOAD_FOLDER.iterdir() if f.is_file()]
-    return templates.TemplateResponse("index.html", {"request": request, "files": files})
+    return templates.TemplateResponse("index.html", {"request": request, "files": get_file_list()})
 
 @router.get("/files")
 async def list_files():
-    files = [f.name for f in UPLOAD_FOLDER.iterdir() if f.is_file()]
-    return {"files": files}
+    return {"files": get_file_list()}
 
 @router.post("/upload")
 async def upload_file(file: UploadFile = File(...)):
@@ -44,11 +43,15 @@ async def upload_file(file: UploadFile = File(...)):
     with file_path.open("wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
 
+    logger.info("Uploaded: %s → %s", file.filename, unique_filename)
+
     return {"filename": unique_filename, "message": "File uploaded successfully"}
 
 @router.get("/download/{filename}")
 async def download_file(filename: str):
     file_path = UPLOAD_FOLDER / filename
+    if not file_path.resolve().is_relative_to(UPLOAD_FOLDER.resolve()):
+        raise HTTPException(status_code=400, detail="Invalid path")
     if not file_path.exists():
         raise HTTPException(status_code=404, detail="File not found")
     return FileResponse(file_path, media_type="application/octet-stream", filename=filename)
@@ -56,8 +59,14 @@ async def download_file(filename: str):
 @router.delete("/delete/{filename}")
 async def delete_file(filename: str):
     file_path = UPLOAD_FOLDER / filename
+    if not file_path.resolve().is_relative_to(UPLOAD_FOLDER.resolve()):
+        raise HTTPException(status_code=400, detail="Invalid path")
+
     if not file_path.exists():
         raise HTTPException(status_code=404, detail="File not found")
     
     file_path.unlink()
+
+    logger.info("Deleted: %s", filename)
+
     return {"filename": filename, "message": "File deleted successfully"}
