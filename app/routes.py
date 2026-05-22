@@ -1,51 +1,54 @@
 from fastapi import APIRouter, UploadFile, File, HTTPException, Request
 from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.templating import Jinja2Templates
-from pathlib import Path
-import shutil
 import logging
 from app.config import UPLOAD_FOLDER, MAX_CONTENT_LENGTH
-from app.utils import check_permissions, allowed_file, get_unique_filename, get_mime_type, get_file_list
-
+from app.utils import (
+    allowed_file, get_unique_filename, get_mime_type, get_file_list,
+    sanitize_filename, load_metadata, save_metadata
+)
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
+
 @router.get("/", response_class=HTMLResponse)
 async def home(request: Request):
     return templates.TemplateResponse(request=request, name="index.html", context={"files": get_file_list()})
+
 
 @router.get("/files")
 async def list_files():
     return {"files": get_file_list()}
 
+
 @router.post("/upload")
 async def upload_file(file: UploadFile = File(...)):
     file_bytes = await file.read()
-    file_size = len(file_bytes)
 
-    if file_size > MAX_CONTENT_LENGTH:
+    if len(file_bytes) > MAX_CONTENT_LENGTH:
         raise HTTPException(status_code=413, detail="File too large")
 
     detected_mime = get_mime_type(file_bytes)
     if not allowed_file(file.filename, detected_mime):
         raise HTTPException(status_code=400, detail="Invalid file type")
 
-    file.file.seek(0)  # Reset pointer after reading
-    unique_filename = get_unique_filename(file.filename)
-    file_path = UPLOAD_FOLDER / unique_filename
-
-    if file_path.exists():
-        raise HTTPException(status_code=409, detail="File already exists")
+    original_name = sanitize_filename(file.filename)
+    stored_name = get_unique_filename(original_name)
+    file_path = UPLOAD_FOLDER / stored_name
 
     with file_path.open("wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
+        buffer.write(file_bytes)
 
-    logger.info("Uploaded: %s → %s", file.filename, unique_filename)
+    meta = load_metadata()
+    meta[stored_name] = original_name
+    save_metadata(meta)
 
-    return {"filename": unique_filename, "message": "File uploaded successfully"}
+    logger.info("Uploaded: %s → %s", original_name, stored_name)
+    return {"filename": stored_name, "original": original_name, "message": "File uploaded successfully"}
+
 
 @router.get("/download/{filename}")
 async def download_file(filename: str):
@@ -54,19 +57,26 @@ async def download_file(filename: str):
         raise HTTPException(status_code=400, detail="Invalid path")
     if not file_path.exists():
         raise HTTPException(status_code=404, detail="File not found")
-    return FileResponse(file_path, media_type="application/octet-stream", filename=filename)
+
+    meta = load_metadata()
+    original_name = meta.get(filename, filename)
+
+    return FileResponse(file_path, media_type="application/octet-stream", filename=original_name)
+
 
 @router.delete("/delete/{filename}")
 async def delete_file(filename: str):
     file_path = UPLOAD_FOLDER / filename
     if not file_path.resolve().is_relative_to(UPLOAD_FOLDER.resolve()):
         raise HTTPException(status_code=400, detail="Invalid path")
-
     if not file_path.exists():
         raise HTTPException(status_code=404, detail="File not found")
-    
+
     file_path.unlink()
 
-    logger.info("Deleted: %s", filename)
+    meta = load_metadata()
+    meta.pop(filename, None)
+    save_metadata(meta)
 
+    logger.info("Deleted: %s", filename)
     return {"filename": filename, "message": "File deleted successfully"}
