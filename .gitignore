@@ -5,3 +5,5 @@ Cert/cert.pem
 __pycache__
 tree.txt
 uploads/
+.env
+logs
