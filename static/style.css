@@ -1,4 +1,9 @@
 /* Basic styles */
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
 body {
     font-family: 'Courier New', Courier, monospace;
     background-color: #111;
@@ -6,8 +11,8 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start; /* Align to top */
-    height: 100vh; /* Use full screen height */
+    justify-content: flex-start;
+    min-height: 100vh;
     margin: 0;
     padding: 0;
 }
@@ -31,7 +36,8 @@ h1, h2 {
 main {
     width: 90%;
     max-width: 1200px;
-    margin-top: 30px; /* Top padding for main content */
+    min-width: 0;
+    margin-top: 30px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -45,10 +51,11 @@ form {
     box-shadow: 0 6px 12px rgba(0, 255, 0, 0.2);
     width: 100%;
     max-width: 600px;
-    margin-bottom: 30px; /* Indent between form and table */
+    margin-bottom: 30px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    box-sizing: border-box;
 }
 
 .custom-file-upload {
@@ -60,10 +67,11 @@ form {
     border: 2px solid #555;
     border-radius: 6px;
     cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s;
+    transition: background-color 0.3s;
     width: 100%;
     text-align: center;
-    margin-bottom: 15px; /* Bottom padding */
+    margin-bottom: 15px;
+    box-sizing: border-box;
 }
 
 input[type="file"] {
@@ -80,6 +88,7 @@ input[type="submit"] {
     cursor: pointer;
     margin-top: 15px;
     width: 100%;
+    font-family: 'Courier New', Courier, monospace; 
 }
 
 input[type="submit"]:hover {
@@ -93,50 +102,121 @@ input[type="submit"]:hover {
     text-align: center;
 }
 
-/* Header for files */
+/* File stats */
+.file-stats {
+    margin-top: 10px;
+    text-align: right;
+    color: #555;
+    font-size: 13px;
+    width: 100%;
+}
+
+/* Toast */
+#toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: #222;
+    color: #0f0;
+    border: 1px solid #0f0;
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-size: 14px;
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s;
+    z-index: 200;
+    white-space: nowrap;
+}
+
+#toast.toast-visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* Progress bar */
+#progressContainer {
+    margin: 12px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+#progressBar {
+    flex: 1;
+    height: 10px;
+}
+
+#message {
+    margin-top: 10px;
+    font-weight: bold;
+    text-align: center;
+}
+
 h2 {
     width: 100%;
-    text-align: center; /* Center the header */
+    text-align: center;
     margin-top: 30px;
 }
 
-/* Section with files */
 .file-section {
     width: 100%;
-    max-width: 1200px;
+    max-width: 100%;
+    min-width: 0;
     margin: 0 auto;
+    overflow: hidden;
 }
 
-/* Table container for mobile scrolling */
 .table-container {
     width: 100%;
-    overflow-x: auto; /* Enable horizontal scrolling if needed */
+    overflow-x: hidden;
 }
 
-/* Table styles */
+/* Table — desktop */
 .file-table {
     width: 100%;
-    table-layout: fixed; /* Prevent table from expanding */
+    table-layout: auto;
     background-color: #1a1a1a;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 255, 0, 0.2);
     border-collapse: collapse;
 }
 
-.file-table th, .file-table td {
-    padding: 12px;
-    text-align: center;
+.file-table th,
+.file-table td {
+    padding: 12px 14px;
     border-bottom: 1px solid #555;
     color: #0f0;
-    white-space: nowrap; /* Prevent line breaks */
-    overflow: hidden;
-    text-overflow: ellipsis; /* Show "..." if text is too long */
-    max-width: 150px; /* Prevent excessive width */
+    vertical-align: middle;
 }
 
 .file-table th {
     background-color: #333;
     color: #fff;
+    white-space: nowrap;
+}
+
+/* Filename column */
+.file-table th:nth-child(1),
+.file-table td:nth-child(1) {
+    text-align: left;
+    word-break: break-all;
+    overflow-wrap: anywhere;
+    white-space: normal;
+    min-width: 0;
+}
+
+/* Action columns */
+.file-table th:nth-child(2),
+.file-table td:nth-child(2),
+.file-table th:nth-child(3),
+.file-table td:nth-child(3),
+.file-table th:nth-child(4),
+.file-table td:nth-child(4) {
+    width: 1%;
+    white-space: nowrap;
+    text-align: center;
 }
 
 .file-table tr:nth-child(even) {
@@ -147,15 +227,20 @@ h2 {
     background-color: #444;
 }
 
-/* Button styles */
+/* Buttons */
 button {
-    padding: 8px 16px;
+    display: inline-block;
+    padding: 6px 14px;
     background-color: #0f0;
     color: black;
     border-radius: 6px;
     border: 2px solid #555;
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+    white-space: nowrap;
+    box-sizing: border-box;
 }
 
 button:hover {
@@ -163,41 +248,98 @@ button:hover {
     color: white;
 }
 
-/* Mobile styles */
-@media (max-width: 768px) {
-    .file-table {
-        width: 100%;
-    }
-
-    .file-table th, .file-table td {
-        font-size: 14px;
-        max-width: 120px;
-    }
-
-    .custom-file-upload, input[type="submit"], button {
-        font-size: 14px;
-        padding: 10px 20px;
-    }
+.file-table a {
+    color: #0f0;
+    text-decoration: underline;
+    white-space: nowrap;
 }
 
-@media (max-width: 480px) {
-    .table-container {
-        width: 100%;
-        overflow-x: auto; /* Enable horizontal scrolling on small screens */
-    }
+.file-table a:hover {
+    color: #fff;
+}
 
-    .file-table th, .file-table td {
-        font-size: 12px;
-        max-width: 100px; /* Reduce max-width for mobile */
-    }
+/* ── Token gate ── */
+#tokenGate {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #111;
+    z-index: 100;
+    padding: 20px;
+    box-sizing: border-box;
+}
 
-    .custom-file-upload, input[type="submit"], button {
-        font-size: 12px;
-        padding: 8px 16px;
-    }
+.token-form {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+    background: #222;
+    padding: 40px 32px;
+    border-radius: 12px;
+    box-shadow: 0 6px 24px rgba(0, 255, 0, 0.2);
+    width: 100%;
+    max-width: 400px;
+    box-sizing: border-box;
+}
 
-    button {
-        font-size: 12px;
-        padding: 6px 12px;
-    }
+.token-form h2 {
+    margin: 0;
+    font-size: 22px;
+    text-align: center;
+}
+
+.token-input-row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
+
+#tokenInput {
+    flex: 1 1 auto;
+    min-width: 0;
+    background: #333;
+    border: 2px solid #555;
+    border-radius: 6px;
+    color: #0f0;
+    font-family: 'Courier New', monospace;
+    font-size: 16px;
+    padding: 12px;
+    box-sizing: border-box;
+}
+
+#tokenInput:focus {
+    outline: none;
+    border-color: #0f0;
+}
+
+#toggleBtn {
+    flex: 0 0 70px;
+    width: 70px;
+    padding: 12px 0;
+    background-color: #444;
+    color: #fff;
+    border: 2px solid #555;
+    font-size: 13px;
+}
+
+#toggleBtn:hover {
+    background-color: #555;
+    color: #fff;
+}
+
+.token-submit {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+}
+
+#tokenError {
+    text-align: center;
+    font-size: 14px;
 }

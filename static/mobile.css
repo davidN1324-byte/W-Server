@@ -1,0 +1,38 @@
+/* Mobile */
+@media (max-width: 600px) {
+    .file-table th,
+    .file-table td {
+        padding: 8px 4px;
+        font-size: 11px;
+    }
+
+    .file-table th:nth-child(1),
+    .file-table td:nth-child(1) {
+        width: 45%;
+        padding: 8px 10px;
+        word-break: break-all;
+        overflow-wrap: anywhere;
+        white-space: normal;
+    }
+
+    .file-table th:nth-child(2),
+    .file-table td:nth-child(2) {
+        width: 15%;
+    }
+
+    .file-table th:nth-child(3),
+    .file-table td:nth-child(3) {
+        width: 20%;
+    }
+
+    .file-table th:nth-child(4),
+    .file-table td:nth-child(4) {
+        width: 20%;
+    }
+
+    button,
+    .file-table a {
+        font-size: 10px;
+        padding: 4px 6px;
+    }
+}
