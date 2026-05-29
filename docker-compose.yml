@@ -1,0 +1,13 @@
+services:
+  w-server:
+    build: .
+    container_name: w-server
+    ports:
+      - "${PORT:-5000}:5000"
+    volumes:
+      - ./uploads:/app/uploads
+      - ./logs:/app/logs
+      - ./Cert:/app/Cert:ro
+    env_file:
+      - .env
+    restart: unless-stopped

@@ -1,19 +1,14 @@
-# Use official Python image (customize depending on your server)
-FROM python:3.12
+FROM python:3.12-slim
 
-RUN apt-get update && apt-get install -y libmagic1 && rm -rf /var/lib/apt/lists/*
+WORKDIR /app
 
-# Set up working directory in container
-WORKDIR /Web-Server
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy all project files to container
 COPY . .
 
-# Install dependencies (if using requirements.txt)
-RUN pip install -r requirements.txt
+RUN mkdir -p uploads logs
 
-# Open port that your web server uses (replace with required)
 EXPOSE 5000
 
-# Command to start server (replace with required)
-CMD ["python", "main.py"]
+CMD ["python3", "run.py", "--host", "0.0.0.0", "--port", "5000"]
