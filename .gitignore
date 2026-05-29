@@ -1,9 +1,9 @@
 .venv/
-static/icon/
-Cert/key.pem
-Cert/cert.pem
 __pycache__
-tree.txt
-uploads/
 .env
-logs
+.git/
+Cert/
+uploads/
+logs/
+*.pyc
+static/icon/*
