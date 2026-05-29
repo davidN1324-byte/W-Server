@@ -6,12 +6,26 @@
     <link rel="stylesheet" href="{{ url_for('static', path='style.css') }}">
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', path='icon/100x99.png') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="dark">
+    <link rel="stylesheet" media="(max-width: 600px)" href="{{ url_for('static', path='mobile.css') }}">
 </head>
 <body>
+
+    <div id="tokenGate" style="display:none;">
+        <div class="token-form">
+            <h2>Enter access token</h2>
+            <div class="token-input-row">
+                <input type="password" id="tokenInput" placeholder="Token"
+                       onkeydown="if(event.key==='Enter') submitToken()" autofocus>
+                <button id="toggleBtn" onclick="toggleTokenVisibility()" type="button">Show</button>
+            </div>
+            <button class="token-submit" onclick="submitToken()" type="button">Enter</button>
+            <div id="tokenError" style="color:red; display:none;">Invalid token</div>
+        </div>
+    </div>
+
     <header>
         <h1>Upload File</h1>
-        <div id="message" style="display: none; color: red;"></div>
-        <div id="loading" style="display: none;">Loading file, please wait...</div>
     </header>
 
     <main>
@@ -20,126 +34,39 @@
                 Select file
                 <input type="file" name="file" id="fileInput" onchange="updateFileInfo()">
             </label>
-            <div id="fileInfo" class="file-info">File name: <span id="fileName">No file selected</span></div>
+            <div id="fileInfo" class="file-info" style="display:none;">
+                File name: <span id="fileName"></span>
+            </div>
+
+            <div id="progressContainer" style="display: none;">
+                <progress id="progressBar" value="0" max="100"></progress>
+                <span id="progressText">0%</span>
+            </div>
+
+            <div id="message" style="display: none;"></div>
+
             <input type="submit" value="Upload">
         </form>
 
         <section class="file-section">
             <h2>Available files for download:</h2>
-            <table class="file-table">
-                <thead>
-                    <tr>
-                        <th>File name</th>
-                        <th>Download</th>
-                        <th>Delete</th>
-                    </tr>
-                </thead>
-                <tbody id="fileList"></tbody>
-            </table>
+            <div class="table-container">
+                <table class="file-table">
+                    <thead>
+                        <tr>
+                            <th>File name</th>
+                            <th>Size</th>
+                            <th>Download</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody id="fileList"></tbody>
+                </table>
+            </div>
+            <div id="fileStats" class="file-stats"></div>
         </section>
     </main>
 
-    <script>
-        function updateFileInfo() {
-            const fileInput = document.getElementById('fileInput');
-            document.getElementById('fileName').textContent =
-                fileInput.files[0] ? fileInput.files[0].name : 'No file selected';
-        }
-
-        async function uploadFile(event) {
-            event.preventDefault();
-
-            const fileInput = document.getElementById('fileInput');
-            const file = fileInput.files[0];
-            if (!file) {
-                alert('Please select a file to upload.');
-                return false;
-            }
-
-            const formData = new FormData();
-            formData.append('file', file);
-
-            document.getElementById('loading').style.display = 'block';
-
-            try {
-                const response = await fetch('/upload', { method: 'POST', body: formData });
-                const result = await response.json();
-
-                if (response.ok) {
-                    loadFiles();
-                    fileInput.value = '';
-                    document.getElementById('fileName').textContent = 'No file selected';
-                    alert('File uploaded successfully!');
-                } else {
-                    alert('Upload error: ' + result.detail);
-                }
-            } catch (error) {
-                alert('Error: ' + error.message);
-            } finally {
-                document.getElementById('loading').style.display = 'none';
-            }
-
-            return false;
-        }
-
-        async function loadFiles() {
-            try {
-                const response = await fetch('/files');
-                const result = await response.json();
-
-                const fileList = document.getElementById('fileList');
-                fileList.innerHTML = '';
-
-                result.files.forEach(file => {
-                    const row = document.createElement('tr');
-
-                    // Original file name
-                    const nameCell = document.createElement('td');
-                    nameCell.textContent = file.original;
-                    row.appendChild(nameCell);
-
-                    // Download by stored name (original name sent by server via Content-Disposition)
-                    const downloadCell = document.createElement('td');
-                    const downloadLink = document.createElement('a');
-                    downloadLink.href = '/download/' + file.stored;
-                    downloadLink.textContent = 'Download';
-                    downloadCell.appendChild(downloadLink);
-                    row.appendChild(downloadCell);
-
-                    // Delete by stored name
-                    const deleteCell = document.createElement('td');
-                    const deleteButton = document.createElement('button');
-                    deleteButton.textContent = 'Delete';
-                    deleteButton.onclick = () => deleteFile(file.stored);
-                    deleteCell.appendChild(deleteButton);
-                    row.appendChild(deleteCell);
-
-                    fileList.appendChild(row);
-                });
-            } catch (error) {
-                console.error('Error loading file list:', error.message);
-            }
-        }
-
-        async function deleteFile(filename) {
-            if (!confirm('Delete this file?')) return;
-
-            try {
-                const response = await fetch(`/delete/${filename}`, { method: 'DELETE' });
-                const result = await response.json();
-
-                if (response.ok) {
-                    loadFiles();
-                    alert('File successfully deleted!');
-                } else {
-                    alert('Delete error: ' + result.detail);
-                }
-            } catch (error) {
-                alert('Error: ' + error.message);
-            }
-        }
-
-        window.onload = loadFiles;
-    </script>
+    <script src="{{ url_for('static', path='app.js') }}"></script>
 </body>
 </html>
