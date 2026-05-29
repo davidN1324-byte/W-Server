@@ -1,6 +1,8 @@
 fastapi
-uvicorn
-python-magic
+uvicorn[standard]
+filetype
 jinja2
 python-multipart
-#python-magic-bin
+slowapi
+python-dotenv
+cryptography
